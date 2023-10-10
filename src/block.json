@@ -1,0 +1,49 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "create-block/treb-spreadsheet",
+	"version": "0.1.11",
+	"title": "TREB Spreadsheet",
+	"category": "embed",
+	"icon": "media-spreadsheet",
+	"description": "Embed fully-interactive spreadsheets in your posts.",
+	"attributes": {
+    "theme": {
+      "type": "string",
+      "default": ""
+    },
+    "uid": {
+			"type": "string"
+    },
+    "json": {
+			"type": "string"
+    },
+    "options": {
+			"type": "object",
+      "default": {
+        "resizable": true,
+        "toolbar": true,
+        "scale_control": false,
+        "collapsed": true
+      }
+    },
+    "constrain_width": {
+      "type": "boolean",
+      "default": true
+    },
+    "width": {
+      "type": "number"
+    },
+    "height": {
+      "type": "number"
+    }
+	},
+  "keywords": ["spreadsheet"],
+	"supports": {
+		"html": false
+	},
+	"textdomain": "treb-spreadsheet",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}
