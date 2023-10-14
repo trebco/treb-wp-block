@@ -3,7 +3,8 @@
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-components/
  */
-import { Placeholder, TextControl, Card, CardHeader, CardBody, Button, ToggleControl, FormFileUpload, SelectControl  } from '@wordpress/components';
+import { Placeholder, TextControl, Card, CardHeader, CardBody,
+         Button, ToggleControl, FormFileUpload, SelectControl  } from '@wordpress/components';
 import { Spreadsheet } from './spreadsheet';
 
 import { Panel, PanelBody, PanelRow } from '@wordpress/components';
@@ -43,7 +44,7 @@ const UID = () => {
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { FormToggle } from '@wordpress/components';
-import type { EmbeddedSpreadsheet, EmbeddedSpreadsheetOptions } from '@trebco/treb';
+import { TREB, type EmbeddedSpreadsheet, type EmbeddedSpreadsheetOptions } from '@trebco/treb';
 import type { Attributes } from './types';
 
 /**
@@ -77,7 +78,11 @@ export default function Edit({
     setAttributes({uid});
   }
 
-  console.info({uid, options});
+  if (!attributes['treb-version']) {
+    setAttributes({'treb-version': TREB.version});
+  }
+
+  // console.info({uid, options});
 
   /*
   if (!attributes.options) {
@@ -93,10 +98,6 @@ export default function Edit({
   */
 
   let sheet: EmbeddedSpreadsheet|undefined;
-
-  const onResize = () => {
-    console.info("on RESIZE");
-  };
 
   const setInstance = (instance?: EmbeddedSpreadsheet) => {
     sheet = instance;
@@ -135,10 +136,12 @@ export default function Edit({
 
             <PanelBody title="Document" initialOpen={ true }>
               <PanelRow>
-                <Button onClick={ImportFile}>Import file</Button>
+                <Button 
+                  onClick={ImportFile}>Import XLSX or JSON file</Button>
               </PanelRow>
               <PanelRow>
-                <Button onClick={ResetDocument}>Reset document (clear)</Button>
+                <Button 
+                  onClick={ResetDocument}>Reset document (clear)</Button>
               </PanelRow>
             </PanelBody>
 
@@ -181,11 +184,11 @@ export default function Edit({
               </PanelRow>
               <PanelRow>
                 <ToggleControl 
-                  help={ attributes.constrain_width ? 'Resize height but use column width' : 'Allow resizing to change width'}
+                  help={ options.constrain_width ? 'Resize height but use column width' : 'Allow resizing to change width'}
                   label="Constrain width"
-                  checked={!!attributes.constrain_width}
+                  checked={!!options.constrain_width}
                   disabled={!options.resizable} 
-                  onChange={() => setAttributes({constrain_width: !attributes.constrain_width})}
+                  onChange={() => ToggleOption('constrain_width')}
                   />
               </PanelRow>
 
@@ -207,7 +210,7 @@ export default function Edit({
 
         </div>
       </InspectorControls>
-      <Spreadsheet {...{attributes, setAttributes, setInstance, onResize}}></Spreadsheet>        
+      <Spreadsheet {...{attributes, setAttributes, setInstance}}></Spreadsheet>        
 		</div>
 	);
 }

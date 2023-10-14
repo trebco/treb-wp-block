@@ -2,20 +2,22 @@
 Contributors:      trebco llc
 Tags:              block
 Tested up to:      6.3
-Stable tag:        0.3.2
+Stable tag:        0.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-A Wordpress Gutenberg block editor for embedding TREB spreadsheets in posts.
+A block editor for embedding interactive spreadsheets.
 
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+TREB is a web spreadsheet component. This plugin adds the spreadsheet component
+to the block editor, so you can embed fully-interactive spreadsheets in your 
+posts with just a few clicks.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
-
+TREB can read and write XLSX files so if you have a spreadsheet you want to 
+embed in a post, it's as simple as (1) adding the block and (2) loading the 
+file. 
 
 == Installation ==
 
@@ -25,26 +27,29 @@ Markdown parsed.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How do I upload a spreadsheet file? =
 
-An answer to that question.
+Just drag-and-drop the XLSX file or select the spreadsheet and click "Import" 
+in the sidebar. 
 
-= What about foo bar? =
+= Does this upload my file to the cloud somewhere? =
 
-Answer to foo bar dilemma.
+No. Everything is served from your Wordpress blog. If you use an XLSX file, 
+we convert it to our format and then include it directly in the HTML in a 
+script tag.
+
+= What files are supported? =
+
+We support XLSX and CSV files (and our own JSON format). We don't support VBA.
 
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. A spreadsheet in the block editor
 
 
 == Changelog ==
 
-= 0.3.2 =
-* Initial release
+= 0.5.0 =
+* Preview release
 

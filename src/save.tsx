@@ -9,14 +9,14 @@ import { useBlockProps } from '@wordpress/block-editor';
 import type {  DOMAttributes }  from 'react';
 import type { EmbeddedSpreadsheet, EmbeddedSpreadsheetOptions } from '@trebco/treb';
 import type { Attributes } from './types';
+
+// for versioning -- could be passed in as attribute
 import { TREB } from '@trebco/treb';
 
-type CustomElement<T> = Partial<T & DOMAttributes<T> & { children: any }>;
-
 declare global {
-  namespace JSX {
+  namespace React.JSX {
     interface IntrinsicElements {
-      ['treb-spreadsheet']: CustomElement<HTMLElement & { instance: { sheet: EmbeddedSpreadsheet }}>;
+      ['treb-spreadsheet']: Omit<Partial<HTMLElement>, 'children'|'style'> & { children?: any; style?: Partial<CSSStyleDeclaration> };
     }
   }
 }
@@ -38,15 +38,22 @@ export default function save({ attributes }: { attributes: Attributes }) {
 
   const uid = attributes.uid;
 
+  //
   // typing this temporarily just for convenience
+  // wait -- do we support snake case for attribute options? 
+  //
+  // A: I guess we do, although we shouldn't necessarily rely on that?
+  //
   const options: Partial<Record<keyof EmbeddedSpreadsheetOptions, string>> = {
 
-    local_storage: `${uid}-document`,
+    local_storage: `${uid}:${attributes['file-version'] || 0}-document`,
     persist_scale: `${uid}-scale`,
     font_scale: 'true',
     chart_menu: 'true',
     table_button: 'true',
     freeze_button: 'true',
+    revert_button: 'true',
+    revert_indicator: 'true',
 
   };
 
@@ -54,18 +61,20 @@ export default function save({ attributes }: { attributes: Attributes }) {
     (options as Record<string, string>)[key] = (value as any).toString();
   }
 
-  const style_block: Record<string, string> = {};
-  if (attributes.height) {
-    style_block.height = attributes.height + 'px';
-  }
-  if (attributes.width && !attributes.constrain_width) {
-    style_block.width = attributes.width + 'px';
-  }
+  //
+  // we set display to block in the style tag to prevent jittery loading 
+  //
+  const style_block: Partial<CSSStyleDeclaration> = {
+    display: 'block',
+    height: attributes.height ? attributes.height + 'px' : undefined,
+    width: (attributes.width && !attributes.constrain_width) ? attributes.width + 'px' : undefined,
+  };
+
+  const version = attributes['treb-version'] || TREB.version;
 
 	return (
     <div { ...blockProps }>
       <span></span>
-      <script type="module" src={`https://unpkg.com/@trebco/treb@${TREB.version}`}></script>
       <treb-spreadsheet {...(options as Record<string, string>)}
           style={style_block}
           inline-document="true">
@@ -75,4 +84,5 @@ export default function save({ attributes }: { attributes: Attributes }) {
       </treb-spreadsheet>
     </div>
   );
+
 }

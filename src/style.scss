@@ -3,9 +3,11 @@
  * and in the editor.
  */
 
-.wp-block-create-block-treb-spreadsheet treb-spreadsheet {
-  border: 0;
-  width: 100%;
-  height: 400px;
+.wp-block-create-block-treb-spreadsheet {
+  treb-spreadsheet, .treb-spreadsheet {
+    border: 0;
+    width: 100%;
+    height: 400px;
+  }
 }
 

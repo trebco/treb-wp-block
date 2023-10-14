@@ -24,7 +24,8 @@
         "resizable": true,
         "toolbar": true,
         "scale_control": false,
-        "collapsed": true
+        "collapsed": true,
+        "scale": 0.95
       }
     },
     "constrain_width": {
@@ -36,6 +37,12 @@
     },
     "height": {
       "type": "number"
+    },
+    "file-version": {
+      "type": "number"
+    },
+    "treb-version": {
+      "type": "string"
     }
 	},
   "keywords": ["spreadsheet"],
