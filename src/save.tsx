@@ -6,12 +6,11 @@
  */
 import { useBlockProps } from '@wordpress/block-editor';
 
-import type {  DOMAttributes }  from 'react';
-import type { EmbeddedSpreadsheet, EmbeddedSpreadsheetOptions } from '@trebco/treb';
+import type { EmbeddedSpreadsheetOptions } from '@trebco/treb';
 import type { Attributes } from './types';
 
 // for versioning -- could be passed in as attribute
-import { TREB } from '@trebco/treb';
+// import { TREB } from '@trebco/treb';
 
 declare global {
   namespace React.JSX {
@@ -70,7 +69,7 @@ export default function save({ attributes }: { attributes: Attributes }) {
     width: (attributes.width && !attributes.constrain_width) ? attributes.width + 'px' : undefined,
   };
 
-  const version = attributes['treb-version'] || TREB.version;
+  // const version = attributes['treb-version'] || TREB.version;
 
 	return (
     <div { ...blockProps }>

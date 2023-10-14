@@ -3,12 +3,9 @@
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-components/
  */
-import { Placeholder, TextControl, Card, CardHeader, CardBody,
-         Button, ToggleControl, FormFileUpload, SelectControl  } from '@wordpress/components';
+import { Button, ToggleControl, SelectControl  } from '@wordpress/components';
 import { Spreadsheet } from './spreadsheet';
-
-import { Panel, PanelBody, PanelRow } from '@wordpress/components';
-// import { more } from '@wordpress/icons';
+import { PanelBody, PanelRow } from '@wordpress/components';
 
 //
 // typescript wizardry
@@ -43,7 +40,6 @@ const UID = () => {
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { FormToggle } from '@wordpress/components';
 import { TREB, type EmbeddedSpreadsheet, type EmbeddedSpreadsheetOptions } from '@trebco/treb';
 import type { Attributes } from './types';
 
@@ -81,21 +77,6 @@ export default function Edit({
   if (!attributes['treb-version']) {
     setAttributes({'treb-version': TREB.version});
   }
-
-  // console.info({uid, options});
-
-  /*
-  if (!attributes.options) {
-    options = {
-      collapsed: true,
-      toolbar: false,
-      resizable: false,
-      scale: .95,
-      revert_button: true,
-    };
-    setAttributes({options: {...options}});
-  }
-  */
 
   let sheet: EmbeddedSpreadsheet|undefined;
 
