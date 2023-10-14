@@ -1,5 +1,9 @@
 {
 	"name": "treb-wp-block",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trebco/treb-block-plugin"
+  },
 	"version": "0.5.0",
 	"description": "A Wordpress Gutenberg block editor for embedding TREB spreadsheets in posts.",
 	"author": {
