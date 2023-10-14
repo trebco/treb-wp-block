@@ -33,12 +33,13 @@ contents = contents.replace(/(\$version\s*=\s*)'[\d.]+'/, '$1' + `'${treb_versio
 // console.info(contents);
 await fs.writeFile(php_file, contents, { encoding: 'utf-8' });
 
-//--- update version in block file ---------------------------------------------
+//--- update versions in block file ---------------------------------------------
 
 const block_file = path.join('src', 'block.json');
 contents = await fs.readFile(block_file, { encoding: 'utf-8' });
 const obj = JSON.parse(contents);
 obj.version = package_version;
+obj.attributes['treb-version'].default = treb_version;
 contents = JSON.stringify(obj, undefined, 2);
 // console.info(contents);
 await fs.writeFile(block_file, contents, { encoding: 'utf-8' });

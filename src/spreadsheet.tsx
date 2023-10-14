@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TREB, type EmbeddedSpreadsheet, type EmbeddedSpreadsheetOptions, TREBGlobal } from '@trebco/treb';
+import { type EmbeddedSpreadsheet, type EmbeddedSpreadsheetOptions, TREBGlobal } from '@trebco/treb';
 
 import type { Attributes } from './types';
 
@@ -15,11 +15,13 @@ export interface State {
   doc?: Document;
   dirty?: boolean;
   element?: HTMLElement;
-  container?: HTMLElement & { instance?: { sheet?: EmbeddedSpreadsheet }};
+  container?: HTMLElement & { instance?: { sheet?: EmbeddedSpreadsheet } };
   subscription?: number;
 }
 
 export class Spreadsheet extends React.Component<Props, State> {
+
+  public static TREB?: TREBGlobal;
 
   public container_ref = React.createRef<HTMLDivElement>();
 
@@ -28,6 +30,10 @@ export class Spreadsheet extends React.Component<Props, State> {
   public Rebuild({ doc, element, data }: { doc: Document, element: HTMLElement, data?: string }) {
 
     const options = this.props.attributes.options || {};
+
+    if (!Spreadsheet.TREB) {
+      throw new Error('Rebuild called without global');
+    }
 
     if (this.state?.container) {
       data = JSON.stringify(this.sheet?.SerializeDocument());
@@ -40,11 +46,11 @@ export class Spreadsheet extends React.Component<Props, State> {
     container.style.height = '100%';
     container.style.overflow = 'hidden';
 
-    this.setState({container});
+    this.setState({ container });
 
     element.append(container);
 
-    const sheet = TREB.CreateSpreadsheet({
+    const sheet = Spreadsheet.TREB.CreateSpreadsheet({
       container,
 
       collapsed: !!options.collapsed,
@@ -61,6 +67,7 @@ export class Spreadsheet extends React.Component<Props, State> {
       scale: typeof options.scale === 'number' ? options.scale : .95,
       dnd: true,
       toll_initial_load: !!data,
+
     });
 
     if (data) {
@@ -76,10 +83,11 @@ export class Spreadsheet extends React.Component<Props, State> {
         case 'resize':
           if (container) {
             const rect = container.getBoundingClientRect();
-            this.props.setAttributes({ 
-              width: rect.width, 
+            const attrs = {
               height: rect.height,
-            });
+              width: (this.props.attributes?.options?.constrain_width) ? undefined : rect.width,
+            };
+            this.props.setAttributes(attrs);
           }
           break;
 
@@ -99,38 +107,60 @@ export class Spreadsheet extends React.Component<Props, State> {
           break;
 
         case 'view-change':
-          this.props.setAttributes({ options: {...(this.props.attributes.options || {}), scale: this.sheet?.scale || 1 } })
+          this.props.setAttributes({ options: { ...(this.props.attributes.options || {}), scale: this.sheet?.scale || 1 } })
 
-          // cascade
+        // cascade
 
         default:
 
-          // we're updating a fake attribute that's not preserved. we'll
-          // use the focus event to actually update, so we don't have to
-          // serialize the document on every event.
-
-          // we're now preserving this value.
+          // we're updating the version attribute, but not the full contents
+          // so we don't have to serialize the document on every event. if 
+          // dirty is set, serialize the content on focus out.
 
           this.props.setAttributes({ 'file-version': (sheet as any).file_version });
-          this.setState({dirty: true});
+          this.setState({ dirty: true });
 
           break;
 
       }
     });
-    this.setState({subscription});
+    this.setState({ subscription });
 
   }
 
   public componentDidMount() {
+
     if (this.container_ref.current) {
       const element = this.container_ref.current;
       const doc = element.ownerDocument;
-      this.setState({doc, element});
-      this.Rebuild({doc, element, data: this.props.attributes.json || undefined});
+      this.setState({ doc, element });
+
+      // get the script from the parent window. we're using a dynamic import 
+      // here because it's the only way we can call the API using the script 
+      // that's already loaded. if we import it statically in this class it'll 
+      // be bundled by webpack and bloat up the plugin.
+
+      // note the attribute selector, we're setting that attribute when we 
+      // add the script tag (via the php plugin).
+
+      const container_script = document.head.querySelector('script[treb]') as HTMLScriptElement;
+      if (container_script) {
+        import(/* webpackIgnore: true */ container_script.src).then((mod?: { TREB?: TREBGlobal }) => {
+          if (mod?.TREB) {
+            Spreadsheet.TREB = mod.TREB;
+            this.Rebuild({ doc, element, data: this.props.attributes.json || undefined });
+          }
+        });
+
+      }
+
     }
   }
 
+  /**
+   * @param prev_props 
+   * @param prev_state 
+   */
   public componentDidUpdate(prev_props: Readonly<Props>, prev_state: State) {
 
     // we might need to rebuild if options have changed
@@ -143,10 +173,11 @@ export class Spreadsheet extends React.Component<Props, State> {
     if (subscription && a !== b) {
       this.sheet?.Cancel(subscription);
       if (this.state.doc && this.state.element) {
-        this.Rebuild({doc: this.state.doc, element: this.state.element});
+        this.Rebuild({ doc: this.state.doc, element: this.state.element });
       }
     }
     else {
+
       if (this.state.container && prev_props.attributes.theme !== this.props.attributes.theme) {
 
         if (prev_props.attributes.theme) {
@@ -155,14 +186,12 @@ export class Spreadsheet extends React.Component<Props, State> {
 
         if (this.props.attributes.theme) {
           this.state.container.classList.add(this.props.attributes.theme);
-        }      
+        }
 
         this.sheet?.UpdateTheme();
       }
 
     }
-
-    // why is this not called from Rebuild? (FIXME)
 
     this.props.setInstance(this.sheet);
 
@@ -171,18 +200,18 @@ export class Spreadsheet extends React.Component<Props, State> {
   public Save(force = false) {
     if (this.state.dirty || force) {
       const json = JSON.stringify(this.sheet?.SerializeDocument());
-      this.props.setAttributes({json});
-      this.setState({dirty: false});
+      this.props.setAttributes({ json });
+      this.setState({ dirty: false });
     }
   }
 
   public render() {
     return (
-      <div className="spreadsheet-container" 
-           onBlur={e => this.Save()}
-           style={{ height: this.props.attributes?.height || undefined }} 
-           ref={this.container_ref} 
-          ></div>
+      <div className="spreadsheet-container"
+        onBlur={e => this.Save()}
+        style={{ height: this.props.attributes?.height || undefined }}
+        ref={this.container_ref}
+      ></div>
     );
   }
 

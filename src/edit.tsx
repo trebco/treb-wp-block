@@ -40,7 +40,7 @@ const UID = () => {
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { TREB, type EmbeddedSpreadsheet, type EmbeddedSpreadsheetOptions } from '@trebco/treb';
+import type { EmbeddedSpreadsheet, EmbeddedSpreadsheetOptions } from '@trebco/treb';
 import type { Attributes } from './types';
 
 /**
@@ -74,9 +74,11 @@ export default function Edit({
     setAttributes({uid});
   }
 
+  /*
   if (!attributes['treb-version']) {
     setAttributes({'treb-version': TREB.version});
   }
+  */
 
   let sheet: EmbeddedSpreadsheet|undefined;
 
