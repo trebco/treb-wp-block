@@ -4,7 +4,7 @@
     "type": "git",
     "url": "https://github.com/trebco/treb-block-plugin"
   },
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"description": "A Wordpress Gutenberg block editor for embedding TREB spreadsheets in posts.",
 	"author": {
 		"name": "trebco llc",
@@ -14,13 +14,14 @@
 	"main": "build/index.js",
 	"scripts": {
 		"assets": "cp node_modules/@trebco/treb/dist/treb-spreadsheet.mjs assets/",
-		"build": "npm run assets && wp-scripts build",
+		"build": "npm run assets && npm run update-versions && wp-scripts build",
 		"clean": "rm -fr build",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
+    "update-versions": "node src/update-versions.mjs",
 		"start": "npm run assets && wp-scripts start"
 	},
 	"devDependencies": {

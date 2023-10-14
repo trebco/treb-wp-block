@@ -1,25 +1,25 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 3,
-	"name": "treb-spreadsheet/block",
-	"version": "0.5.0",
-	"title": "TREB Spreadsheet",
-	"category": "embed",
-	"icon": "media-spreadsheet",
-	"description": "Embed fully-interactive spreadsheets in your posts.",
-	"attributes": {
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "treb-spreadsheet/block",
+  "version": "0.5.1",
+  "title": "TREB Spreadsheet",
+  "category": "embed",
+  "icon": "media-spreadsheet",
+  "description": "Embed fully-interactive spreadsheets in your posts.",
+  "attributes": {
     "theme": {
       "type": "string",
       "default": ""
     },
     "uid": {
-			"type": "string"
+      "type": "string"
     },
     "json": {
-			"type": "string"
+      "type": "string"
     },
     "options": {
-			"type": "object",
+      "type": "object",
       "default": {
         "resizable": true,
         "toolbar": true,
@@ -44,13 +44,15 @@
     "treb-version": {
       "type": "string"
     }
-	},
-  "keywords": ["spreadsheet"],
-	"supports": {
-		"html": false
-	},
-	"textdomain": "treb-spreadsheet",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css"
+  },
+  "keywords": [
+    "spreadsheet"
+  ],
+  "supports": {
+    "html": false
+  },
+  "textdomain": "treb-spreadsheet",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css"
 }

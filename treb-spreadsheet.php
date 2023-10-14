@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       TREB Spreadsheet
  * Description:       A block editor for embedding TREB spreadsheets in posts
- * Version:           0.5.0
+ * Version:           0.5.1
  * Requires at least: 6.3
  * Requires PHP:      7.0
  * Author:            trebco llc
