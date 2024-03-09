@@ -1,2 +1,5 @@
 node_modules
 build
+
+# generated zip file
+treb-block-plugin.zip

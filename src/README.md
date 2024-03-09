@@ -24,3 +24,11 @@ The standard way to distribute plugins appears to be via zip file. But the
 zip file should not have a containing directory -- it should just hold naked
 files. It seems like the plugin system itself can handle a directory but the
 "validator" cannot. 
+
+## Building (updated march 2024)
+
+We should be able to build by just running `npm run plugin-zip`. the 
+config is in the `files` block of `package.json`. That bundles the plugin
+and creates the zip file.
+
+

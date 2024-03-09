@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       TREB Spreadsheet
  * Description:       A block editor for embedding TREB spreadsheets in posts
- * Version:           0.6.0
- * Requires at least: 6.3
+ * Version:           0.7.0
+ * Requires at least: 6.4
  * Requires PHP:      7.0
  * Author:            trebco llc
  * Author URI:        https://treb.app
@@ -37,7 +37,7 @@ function create_block_treb_spreadsheet_block_init() {
 	register_block_type( __DIR__ . '/build' );
 
   $url = plugins_url('assets/treb-spreadsheet.mjs', __FILE__);
-  $version = '28.0.5';
+  $version = '29.5.4';
 
   wp_enqueue_script(
     'treb', 

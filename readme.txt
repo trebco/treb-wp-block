@@ -1,8 +1,8 @@
 === TREB Spreadsheet ===
 Contributors:      trebco llc
 Tags:              block
-Tested up to:      6.3
-Stable tag:        0.6.0
+Tested up to:      6.4
+Stable tag:        0.7.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,6 +49,12 @@ We support XLSX and CSV files (and our own JSON format). We don't support VBA.
 
 
 == Changelog ==
+
+= 0.7.0 =
+* Update TREB version -> 29.5.4
+
+= 0.6.0 =
+* Public release
 
 = 0.5.0 =
 * Preview release
